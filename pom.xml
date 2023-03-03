@@ -46,7 +46,7 @@
 
     <properties>
         <air.license.header-file>license/apache-copyright-header.txt</air.license.header-file>
-
+        <project.build.targetJdk>11</project.build.targetJdk>
         <air.check.skip-jacoco>true</air.check.skip-jacoco>
 
         <dep.airlift.version>0.193</dep.airlift.version>
@@ -285,7 +285,6 @@
                         <systemPropertyVariables>
                             <io.netty.leakDetection.level>PARANOID</io.netty.leakDetection.level>
                         </systemPropertyVariables>
-                        <skipTests>true</skipTests>
                     </configuration>
                 </plugin>
 
