@@ -15,7 +15,7 @@
  */
 package io.airlift.drift.codec.metadata;
 
-import com.google.common.collect.Iterables;
+import com.google.common.collect.MoreCollectors;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.TreeMultimap;
 import io.airlift.drift.annotations.ThriftMethod;
@@ -107,7 +107,7 @@ public class ThriftServiceMetadata
         checkArgument(!serviceAnnotations.isEmpty(), "Service class %s is not annotated with @ThriftService", serviceClass.getName());
         checkArgument(serviceAnnotations.size() == 1, "Service class %s has multiple conflicting @ThriftService annotations: %s", serviceClass.getName(), serviceAnnotations);
 
-        return Iterables.getOnlyElement(serviceAnnotations);
+        return serviceAnnotations.stream().collect(MoreCollectors.onlyElement());
     }
 
     @Override

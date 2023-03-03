@@ -17,7 +17,7 @@ package io.airlift.drift.codec.metadata;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.MoreCollectors;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.reflect.TypeToken;
@@ -590,7 +590,7 @@ public abstract class AbstractThriftMetadataBuilder
             // single id, so set on all fields in this group (groups with no id are handled later),
             // and validate isLegacyId is consistent and correct.
             if (ids.size() == 1) {
-                short id = Iterables.getOnlyElement(ids);
+                short id = ids.stream().collect(MoreCollectors.onlyElement());
 
                 boolean isLegacyId = extractFieldIsLegacyId(id, fieldName, fields);
 

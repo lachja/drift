@@ -17,6 +17,7 @@ package io.airlift.drift.codec.internal.compiler;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.MoreCollectors;
 import com.google.common.reflect.TypeToken;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.airlift.bytecode.BytecodeBlock;
@@ -74,7 +75,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
-import static com.google.common.collect.Iterables.getOnlyElement;
 import static io.airlift.bytecode.Access.BRIDGE;
 import static io.airlift.bytecode.Access.FINAL;
 import static io.airlift.bytecode.Access.PRIVATE;
@@ -540,7 +540,7 @@ public class ThriftCodecByteCodeGenerator<T>
         method.getBody().append(switchBuilder.build());
 
         // find the @ThriftUnionId field
-        ThriftFieldMetadata idField = getOnlyElement(metadata.getFields(THRIFT_UNION_ID));
+        ThriftFieldMetadata idField = metadata.getFields(THRIFT_UNION_ID).stream().collect(MoreCollectors.onlyElement());
 
         injectIdField(method, idField, instance, fieldId);
 
@@ -810,7 +810,7 @@ public class ThriftCodecByteCodeGenerator<T>
         body.append(writer.invoke("writeStructBegin", void.class, constantString(metadata.getStructName())));
 
         // find the @ThriftUnionId field
-        ThriftFieldMetadata idField = getOnlyElement(metadata.getFields(THRIFT_UNION_ID));
+        ThriftFieldMetadata idField = metadata.getFields(THRIFT_UNION_ID).stream().collect(MoreCollectors.onlyElement());
 
         // load its value
         BytecodeExpression value = getFieldValue(method, idField);

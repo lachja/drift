@@ -16,6 +16,7 @@
 package io.airlift.drift.codec.internal.reflection;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.MoreCollectors;
 import io.airlift.drift.codec.ThriftCodec;
 import io.airlift.drift.codec.ThriftCodecManager;
 import io.airlift.drift.codec.internal.ProtocolReader;
@@ -35,7 +36,6 @@ import javax.annotation.concurrent.Immutable;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.Iterables.getOnlyElement;
 import static com.google.common.collect.Maps.uniqueIndex;
 import static io.airlift.drift.codec.internal.reflection.ReflectionThriftStructCodec.invokeConstructor;
 import static io.airlift.drift.codec.internal.reflection.ReflectionThriftStructCodec.invokeMethod;
@@ -55,7 +55,7 @@ public class ReflectionThriftUnionCodec<T>
     {
         super(manager, metadata);
 
-        ThriftFieldMetadata idField = getOnlyElement(metadata.getFields(FieldKind.THRIFT_UNION_ID));
+        ThriftFieldMetadata idField = metadata.getFields(FieldKind.THRIFT_UNION_ID).stream().collect(MoreCollectors.onlyElement());
 
         this.idField = Maps.immutableEntry(idField, manager.getCodec(idField.getThriftType()));
         requireNonNull(this.idField.getValue(), () -> "No codec for ID field found: " + idField);
