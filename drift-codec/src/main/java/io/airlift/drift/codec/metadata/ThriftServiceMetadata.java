@@ -67,12 +67,23 @@ public class ThriftServiceMetadata
 
         // A multimap from order to method name. Sorted by key (order), with nulls (i.e. no order) last.
         // Within each key, values (ThriftMethodMetadata) are sorted by method name.
-        TreeMultimap<Integer, ThriftMethodMetadata> builder = TreeMultimap.create(
-                Ordering.natural().nullsLast(),
-                Ordering.natural().onResultOf(ThriftMethodMetadata::getName));
+        Ordering naturalOrdering = Ordering.natural();
+        Ordering nameOrdering = Ordering.natural().onResultOf(ThriftMethodMetadata::getName);
+        TreeMultimap<Integer, ThriftMethodMetadata> builder = null;
+
+        try {
+            builder = TreeMultimap.create(
+                    requireNonNull(naturalOrdering, "naturalOrdering is null").nullsLast(),
+                    requireNonNull(nameOrdering, "nameOrdering is null"));
+        }
+        catch (NullPointerException e) {
+            throw new IllegalStateException("Failed to create TreeMultimap with non-null comparators", e);
+        }
+
         for (Method method : findAnnotatedMethods(serviceClass, ThriftMethod.class)) {
             if (method.isAnnotationPresent(ThriftMethod.class)) {
-                builder.put(getMethodOrder(method), new ThriftMethodMetadata(method, catalog));
+                builder.put(getMethodOrder(method),
+                        requireNonNull(new ThriftMethodMetadata(method, catalog), "ThriftMethodMetadata is null"));
             }
         }
         methods = builder.values().stream()

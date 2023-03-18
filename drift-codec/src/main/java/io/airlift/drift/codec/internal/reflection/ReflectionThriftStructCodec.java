@@ -117,6 +117,11 @@ public class ReflectionThriftStructCodec<T>
             if (fieldValue != null) {
                 @SuppressWarnings("unchecked")
                 ThriftCodec<Object> codec = (ThriftCodec<Object>) fields.get(fieldMetadata.getId());
+
+                if (codec == null) {
+                    throw new IllegalArgumentException("No Thrift codec found for field " + fieldMetadata.getName());
+                }
+
                 writer.writeField(fieldMetadata.getName(), fieldMetadata.getId(), codec, fieldValue);
             }
         }

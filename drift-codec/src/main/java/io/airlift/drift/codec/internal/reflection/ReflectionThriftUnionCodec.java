@@ -118,8 +118,8 @@ public class ReflectionThriftUnionCodec<T>
         if (metadataMap.containsKey(idValue)) {
             ThriftFieldMetadata fieldMetadata = metadataMap.get(idValue);
 
-            if (fieldMetadata.isReadOnly() || fieldMetadata.getType() != THRIFT_FIELD) {
-                throw new IllegalStateException(format("Field %s is not readable", fieldMetadata.getName()));
+            if (fieldMetadata == null || fieldMetadata.isReadOnly() || fieldMetadata.getType() != THRIFT_FIELD) {
+                throw new IllegalStateException(format("Field %s is not readable", fieldMetadata != null ? fieldMetadata.getName() : "null"));
             }
 
             Object fieldValue = getFieldValue(instance, fieldMetadata);
@@ -128,6 +128,11 @@ public class ReflectionThriftUnionCodec<T>
             if (fieldValue != null) {
                 @SuppressWarnings("unchecked")
                 ThriftCodec<Object> codec = (ThriftCodec<Object>) fields.get(fieldMetadata.getId());
+
+                if (codec == null) {
+                    throw new IllegalArgumentException("No Thrift codec found for field " + fieldMetadata.getName());
+                }
+
                 writer.writeField(fieldMetadata.getName(), fieldMetadata.getId(), codec, fieldValue);
             }
         }
