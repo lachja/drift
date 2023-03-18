@@ -49,9 +49,10 @@
         <project.build.targetJdk>11</project.build.targetJdk>
         <air.check.skip-jacoco>true</air.check.skip-jacoco>
 
-        <dep.airlift.version>0.193</dep.airlift.version>
+        <dep.airlift.version>219</dep.airlift.version>
         <dep.takari-plugin.version>2.9.1</dep.takari-plugin.version>
         <dep.maven.version>3.6.3</dep.maven.version>
+        <dep.netty.version>4.1.90.Final</dep.netty.version>
     </properties>
 
     <dependencyManagement>
@@ -149,7 +150,7 @@
             <dependency>
                 <groupId>io.airlift</groupId>
                 <artifactId>bytecode</artifactId>
-                <version>1.1</version>
+                <version>1.4</version>
             </dependency>
 
             <dependency>
@@ -178,24 +179,44 @@
 
             <dependency>
                 <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-                <version>4.1.89.Final</version>
+                <artifactId>netty-buffer</artifactId>
+                <version>${dep.netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-common</artifactId>
+                <version>${dep.netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler</artifactId>
+                <version>${dep.netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler-proxy</artifactId>
+                <version>${dep.netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec</artifactId>
+                <version>${dep.netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport</artifactId>
+                <version>${dep.netty.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.thrift</groupId>
                 <artifactId>libthrift</artifactId>
                 <version>0.18.0</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.httpcomponents</groupId>
-                        <artifactId>httpcore</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.httpcomponents</groupId>
-                        <artifactId>httpclient</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
@@ -245,6 +266,12 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.13.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>2.0.7</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
